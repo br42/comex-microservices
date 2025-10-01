@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "api.security.token.secret",
+  "type": "java.lang.String",
+  "description": "A secret string used for JWT Token authentication salting. It is passed through 'api.security.token.secret'"
+}]}
