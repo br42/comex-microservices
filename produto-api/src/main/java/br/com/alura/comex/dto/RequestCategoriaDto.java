@@ -1,4 +1,4 @@
-package br.com.alura.comex.controller;
+package br.com.alura.comex.dto;
 
 import br.com.alura.comex.model.Categoria;
 import jakarta.validation.constraints.NotBlank;
