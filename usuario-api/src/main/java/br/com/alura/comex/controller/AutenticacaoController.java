@@ -111,6 +111,17 @@ public class AutenticacaoController {
         return ResponseEntity.ok(usuario);
     }
 
+    @PostMapping("/validar")
+    public ResponseEntity<?> validarToken(String token) {
+        try {
+            tokenService.getSubject(token);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+    
+
     @PostMapping("/hash")
     public ResponseEntity<String> obterHashSenha(@RequestBody @NotNull DadosAutenticacao dados) {
         if (dados == null) return ResponseEntity.badRequest().body("dados{login, senha} não podem ser nulos");
