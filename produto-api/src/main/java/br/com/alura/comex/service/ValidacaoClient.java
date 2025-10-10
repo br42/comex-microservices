@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient("USUARIO-API")
 public interface ValidacaoClient {
-    //#@RequestMapping(method = RequestMethod.POST, value = "/login/validar")
-    @PostMapping("/login/validar")
+    //#@RequestMapping(method = RequestMethod.POST, value = "/login/validartokenfila")
+    @PostMapping("/login/validartokenfila")
     ResponseEntity<Void> validarToken(@RequestBody String token);
 }

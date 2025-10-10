@@ -111,7 +111,7 @@ public class AutenticacaoController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping("/validar")
+    @PostMapping("/validartoken")
     public ResponseEntity<?> validarToken(@RequestBody String token) {
         try {
             tokenService.getSubject(token);
@@ -121,7 +121,17 @@ public class AutenticacaoController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
-    
+
+    @PostMapping("/validartokenfila")
+    public ResponseEntity<?> validarTokenFila(@RequestBody String token) {
+        try {
+            tokenService.getSubject(token);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 
     @PostMapping("/hash")
     public ResponseEntity<String> obterHashSenha(@RequestBody @NotNull DadosAutenticacao dados) {

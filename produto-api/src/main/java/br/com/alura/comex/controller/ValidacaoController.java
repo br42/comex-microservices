@@ -18,7 +18,7 @@ public class ValidacaoController {
     @Autowired
     private ValidacaoService validacaoService;
 
-    @PostMapping
+    @PostMapping("validartoken")
     public ResponseEntity<Object> validarToken(@RequestBody String token){
 
         try {

@@ -2,6 +2,7 @@ package br.com.alura.comex.infra.exception;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.postgresql.util.PSQLException;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,11 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<List<DadosErroValidacao>> tratarErro400(MethodArgumentNotValidException ex) {
         var erros = ex.getFieldErrors();
         return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao::new).toList());
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Void> tratarErro404(NoSuchElementException ex) {
+        return ResponseEntity.notFound().build();
     }
 
     private record DadosErroValidacao(String campo, String mensagem) {
