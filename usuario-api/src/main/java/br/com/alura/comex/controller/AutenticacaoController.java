@@ -2,6 +2,8 @@ package br.com.alura.comex.controller;
 
 import java.util.List;
 
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import br.com.alura.comex.dto.DadosAutenticacao;
+import br.com.alura.comex.dto.DadosValidarToken;
 import br.com.alura.comex.dto.RequestClienteCadastro;
+import br.com.alura.comex.dto.DadosValidarToken.ResultadoValidacaoEnum;
 import br.com.alura.comex.infra.security.DadosTokenJWT;
 import br.com.alura.comex.infra.security.TokenService;
 import br.com.alura.comex.model.Cliente;
@@ -43,6 +49,9 @@ public class AutenticacaoController {
     
     @Autowired
     UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
     @PostMapping
     public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
@@ -125,7 +134,12 @@ public class AutenticacaoController {
     @PostMapping("/validartokenfila")
     public ResponseEntity<?> validarTokenFila(@RequestBody String token) {
         try {
-            tokenService.getSubject(token);
+            String tokenUsuario = tokenService.getSubject(token);
+            //Message message = new Message(tokeninfo.getBytes("UTF-8"));
+            DadosValidarToken tokenDados = new DadosValidarToken(token, tokenUsuario, true, ResultadoValidacaoEnum.AUTH);
+            ObjectMapper jsonMapper = new ObjectMapper();
+            Message message = new Message(jsonMapper.writeValueAsBytes(tokenDados));
+            rabbitTemplate.send("api.token.info", message);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             e.printStackTrace();
