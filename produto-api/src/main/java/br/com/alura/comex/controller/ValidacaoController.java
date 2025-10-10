@@ -27,7 +27,8 @@ public class ValidacaoController {
             }
             
             throw new InvalidKeyException();
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            ex.printStackTrace();
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }

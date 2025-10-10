@@ -11,7 +11,6 @@ public class ValidacaoService {
     }
     
     public boolean validarToken(String token) {
-        //return true;
-        return validacaoClient.validarToken(token);
+        return validacaoClient.validarToken(token).getStatusCode().is2xxSuccessful();
     }
 }

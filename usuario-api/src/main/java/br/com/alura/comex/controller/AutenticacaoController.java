@@ -112,11 +112,12 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/validar")
-    public ResponseEntity<?> validarToken(String token) {
+    public ResponseEntity<?> validarToken(@RequestBody String token) {
         try {
             tokenService.getSubject(token);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
